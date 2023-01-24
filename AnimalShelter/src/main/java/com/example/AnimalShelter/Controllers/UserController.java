@@ -1,13 +1,9 @@
 package com.example.AnimalShelter.Controllers;
 
 import com.example.AnimalShelter.Exceptions.NotFoundException;
-import com.example.AnimalShelter.Models.Pet;
 import com.example.AnimalShelter.Models.User;
 import com.example.AnimalShelter.Services.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,9 +20,9 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping()
-    public User createUser() {
-        return userService.createUser();
+    @PostMapping()
+    public User createUser(@RequestBody User newUser) {
+        return userService.createUser(newUser);
     }
 
     @GetMapping("/userById")

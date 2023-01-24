@@ -35,14 +35,25 @@ public class UserService {
         return userRepository.getAllByName(name);
     }
 
-    public User createUser() {
-        User a = new User();
-        a.setName("Ion");
-        a.setAge(24);
-        a.setUsername("ionutz");
-        a.setEmail("ion24@gmail.com");
-        a.setPassword("parola");
-        a.setAddress("Bucuresti");
-        return a;
+    public User createUser(User newUser) {
+
+        User userToBeSaved = User.builder()
+                .name(newUser.getName())
+                .age(newUser.getAge())
+                .email(newUser.getEmail())
+                .password(newUser.getPassword())
+                .username(newUser.getUsername())
+                .address(newUser.getAddress())
+                .build();
+        userRepository.save(userToBeSaved);
+
+//        User a = new User();
+//        a.setName("Ion");
+//        a.setAge(24);
+//        a.setUsername("ionutz");
+//        a.setEmail("ion24@gmail.com");
+//        a.setPassword("parola");
+//        a.setAddress("Bucuresti");
+        return userToBeSaved;
     }
 }

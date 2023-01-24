@@ -5,10 +5,7 @@ import com.example.AnimalShelter.Models.Pet;
 import com.example.AnimalShelter.Services.PetService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,9 +21,9 @@ public class PetController {
         this.petService = petService;
     }
 
-    @GetMapping()
-    public Pet createPet() {
-        return petService.createPet();
+    @PostMapping()
+    public Pet createPet(@RequestBody Pet newPet) {
+        return petService.createPet(newPet);
     }
 
     @GetMapping("/petsByAge")
@@ -36,7 +33,7 @@ public class PetController {
 
     @GetMapping("/petById")
     public ResponseEntity<Pet> getPetById(@RequestParam int id) throws NotFoundException {
-        return new ResponseEntity<>(petService.getPetById(id), HttpStatus.OK) ;
+        return new ResponseEntity<>(petService.getPetById(id), HttpStatus.OK);
     }
 
     @GetMapping("/allPets")

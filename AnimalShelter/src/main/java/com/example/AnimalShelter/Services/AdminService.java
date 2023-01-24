@@ -6,7 +6,6 @@ import com.example.AnimalShelter.Repositories.AdminRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 
@@ -27,12 +26,22 @@ public class AdminService {
         return adminRepository.findAll();
     }
 
-    public Admin createAdmin() {
-        Admin a = new Admin();
+    public Admin createAdmin(Admin newAdmin) {
+
+        Admin adminToBeSaved = Admin.builder()
+                .name(newAdmin.getName())
+                .location(newAdmin.getLocation())
+                .email(newAdmin.getEmail())
+                .password(newAdmin.getPassword())
+                .build();
+        adminRepository.save(adminToBeSaved);
+
+
+       /* Admin a = new Admin();
         a.setName("Mihai");
         a.setLocation("Bucuresti");
         a.setEmail("mailmihai@gmail.com");
-        a.setPassword("sjhgfdsjhy");
-        return a;
+        a.setPassword("sjhgfdsjhy");*/
+        return adminToBeSaved;
     }
 }

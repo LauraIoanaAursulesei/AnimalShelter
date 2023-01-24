@@ -1,16 +1,12 @@
 package com.example.AnimalShelter.Controllers;
 
+import com.example.AnimalShelter.Exceptions.NotFoundException;
 import com.example.AnimalShelter.Models.Center;
-import com.example.AnimalShelter.Models.Pet;
-import com.example.AnimalShelter.Models.User;
 import com.example.AnimalShelter.Services.CenterService;
-import com.example.AnimalShelter.Services.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -24,14 +20,15 @@ public class CenterController {
         this.centerService = centerService;
     }
 
-    @GetMapping()
-    public Center createCenter() {
-        return centerService.createCenter();
+
+    @PostMapping()
+    public Center createCenter(@RequestBody Center newCenter) {
+        return centerService.createCenter(newCenter);
     }
 
     @GetMapping("/centerById")
-    public List<Center> getCentersbyId(@RequestParam int id) {
-        return centerService.getCentersbyId(id);
+    public Optional<Center> getCenterbyId(@RequestParam int id) throws NotFoundException {
+        return centerService.getCenterById(id);
     }
 
     @GetMapping("/allCenters")

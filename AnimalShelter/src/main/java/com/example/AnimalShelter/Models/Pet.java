@@ -1,16 +1,14 @@
 package com.example.AnimalShelter.Models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "Pet")
 
 public class Pet {
@@ -34,5 +32,6 @@ public class Pet {
     @Column(name = "behavior")
     private String behavior;
     @Column(name = "vaccine")
-    private boolean vaccine;
+    private Boolean vaccine;
+
 }

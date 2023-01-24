@@ -2,12 +2,8 @@ package com.example.AnimalShelter.Controllers;
 
 import com.example.AnimalShelter.Exceptions.NotFoundException;
 import com.example.AnimalShelter.Models.Admin;
-import com.example.AnimalShelter.Models.Pet;
 import com.example.AnimalShelter.Services.AdminService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,9 +18,9 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @GetMapping()
-    public Admin createAdmin() {
-        return adminService.createAdmin();
+    @PostMapping()
+    public Admin createAdmin(@RequestBody Admin newAdmin) {
+        return adminService.createAdmin(newAdmin);
     }
 
     @GetMapping("/adminById")

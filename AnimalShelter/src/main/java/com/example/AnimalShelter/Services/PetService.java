@@ -31,8 +31,21 @@ public class PetService {
     }
 
 
-    public Pet createPet(){
-        Pet a = new Pet();
+    public Pet createPet(Pet newPet){
+
+        Pet petToBeSaved = Pet.builder()
+                .name(newPet.getName())
+                .age(newPet.getAge())
+                .location(newPet.getLocation())
+                .race(newPet.getRace())
+                .size(newPet.getSize())
+                .sex(newPet.getSex())
+                .behavior(newPet.getBehavior())
+                .vaccine(newPet.getVaccine())
+                .build();
+        petRepository.save(petToBeSaved);
+
+       /* Pet a = new Pet();
         a.setName("Martinel");
         a.setAge(7);
         a.setLocation("Bucuresti");
@@ -40,7 +53,7 @@ public class PetService {
         a.setSize("big");
         a.setSex("M");
         a.setBehavior("agresive");
-        a.setVaccine(false);
-        return a;
+        a.setVaccine(false);*/
+        return petToBeSaved;
     }
 }

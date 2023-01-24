@@ -4,11 +4,10 @@ import com.example.AnimalShelter.Models.Center;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CenterRepository extends JpaRepository<Center,Long> {
 
-    //TODO: modifica sa intoarca <Optional>
-    List<Center> getAllById(int id);
+    Optional<Center> getById(int id);
 }
