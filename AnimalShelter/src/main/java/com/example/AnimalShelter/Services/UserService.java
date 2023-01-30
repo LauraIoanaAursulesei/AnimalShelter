@@ -61,8 +61,8 @@ public class UserService {
 
     public User createUser(User newUser) {
 
-        //TODO: fa verificari (username ul sa fie unic, email sa fie unic)
-        //TODO: sa verifici ca parola are un anumit format (lungime,etc)
+        //TODO: fac verificari (username ul sa fie unic, email sa fie unic)
+        //TODO: sa verific ca parola are un anumit format (lungime,etc)
 
         User userToBeSaved = User.builder()
                 .name(newUser.getName())

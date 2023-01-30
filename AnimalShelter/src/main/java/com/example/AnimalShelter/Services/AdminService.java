@@ -48,8 +48,8 @@ public class AdminService {
 
     public Admin createAdmin(Admin newAdmin) {
 
-//TODO: fa verificari (username ul sa fie unic, email sa fie unic)
-//TODO: sa verifici ca parola are un anumit format (lungime,etc)
+//TODO: fac verificari (username ul sa fie unic, email sa fie unic)
+//TODO: sa verific ca parola are un anumit format (lungime,etc)
 
         Admin adminToBeSaved = Admin.builder()
                 .name(newAdmin.getName())
