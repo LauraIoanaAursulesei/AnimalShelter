@@ -24,11 +24,11 @@ public class Center {
     @Column(name="street")
     private String street;
     @Column(name="number")
-    private int number;
+    private Integer number;
     @Column(name="phone")
-    private int phone;
+    private String phone;
     @Column(name="email")
     private String email;
     @Column(name="capacity")
-    private int capacity;
+    private Integer capacity;
 }

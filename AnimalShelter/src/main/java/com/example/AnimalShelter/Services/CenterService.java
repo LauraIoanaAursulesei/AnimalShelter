@@ -17,20 +17,46 @@ public class CenterService {
         this.centerRepository = centerRepository;
     }
 
-    public Optional<Center> getCenterById(int id) throws NotFoundException {
+    public Center updateCenter(Center newCenter) throws NotFoundException {
+        Center center = centerRepository.findById(newCenter.getId()).orElseThrow(() -> new NotFoundException("Id not found"));
+
+        if (newCenter.getName() != null)
+            center.setName(newCenter.getName());
+        if (newCenter.getCity() != null)
+            center.setCity(newCenter.getCity());
+        if (newCenter.getStreet() != null)
+            center.setStreet(newCenter.getStreet());
+        if (newCenter.getNumber() != null)
+            center.setNumber(newCenter.getNumber());
+        if (newCenter.getPhone() != null)
+            center.setPhone(newCenter.getPhone());
+        if (newCenter.getEmail() != null)
+            center.setEmail(newCenter.getEmail());
+        if (newCenter.getCapacity() != null)
+            center.setCapacity(newCenter.getCapacity());
+
+        return centerRepository.save(center);
+    }
+
+    public void deleteCenter(Long id) throws NotFoundException {
+        Center center = centerRepository.findById(id).orElseThrow(() -> new NotFoundException("Id not found"));
+        centerRepository.delete(center);
+    }
+
+    public Optional<Center> getCenterById(Long id) throws NotFoundException {
         Optional<Center> center;
-        if (centerRepository.getById(id).isEmpty())
+        if (centerRepository.findById(id).isEmpty())
             throw new NotFoundException("Id not found");
         else
-            center = centerRepository.getById(id);
+            center = centerRepository.findById(id);
         return center;
     }
 
-    public List<Center> getAllCenters(){
+    public List<Center> getAllCenters() {
         return centerRepository.findAll();
     }
 
-    public Center createCenter(Center newCenter){
+    public Center createCenter(Center newCenter) {
 
         Center centerToBeSaved = Center.builder()
                 .name(newCenter.getName())
@@ -42,15 +68,6 @@ public class CenterService {
                 .capacity(newCenter.getCapacity())
                 .build();
         centerRepository.save(centerToBeSaved);
-
-       /* Center a = new Center();
-        a.setName("Happy Pet Bucharest");
-        a.setCity("Bucuresti");
-        a.setStreet("Soseaua Pantelimon");
-        a.setNumber(362);
-        a.setPhone(867436786);
-        a.setEmail("happypetbucharest@gmail.com");
-        a.setCapacity(20);*/
         return centerToBeSaved;
     }
 }

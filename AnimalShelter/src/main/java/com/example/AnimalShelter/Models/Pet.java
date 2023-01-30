@@ -20,7 +20,7 @@ public class Pet {
     @Column(name = "name")
     private String name;
     @Column(name = "age")
-    private int age;
+    private Integer age;
     @Column(name = "location")
     private String location;
     @Column(name = "race")

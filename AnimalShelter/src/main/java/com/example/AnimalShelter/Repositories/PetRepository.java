@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface PetRepository extends JpaRepository<Pet,Long> {
 
    List<Pet> getAllByAge(int age);
-   Optional<Pet> getById(int id);
+   Optional<Pet> findById(Long id);
 
 }

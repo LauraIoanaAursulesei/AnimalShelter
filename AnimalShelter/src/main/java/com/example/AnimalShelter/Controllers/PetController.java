@@ -9,16 +9,24 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/pet")
-
 public class PetController {
 
     private PetService petService;
 
     public PetController(PetService petService) {
         this.petService = petService;
+    }
+
+    @PutMapping()
+    public Pet updatePet(@RequestBody Pet newPet) throws NotFoundException {
+        return petService.updatePet(newPet);
+    }
+
+    @DeleteMapping()
+    public void deletePet(Long id) throws NotFoundException {
+        petService.deletePet(id);
     }
 
     @PostMapping()
@@ -32,7 +40,7 @@ public class PetController {
     }
 
     @GetMapping("/petById")
-    public ResponseEntity<Pet> getPetById(@RequestParam int id) throws NotFoundException {
+    public ResponseEntity<Pet> getPetById(@RequestParam Long id) throws NotFoundException {
         return new ResponseEntity<>(petService.getPetById(id), HttpStatus.OK);
     }
 

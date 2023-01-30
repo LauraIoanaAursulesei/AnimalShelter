@@ -20,6 +20,15 @@ public class CenterController {
         this.centerService = centerService;
     }
 
+    @PutMapping()
+    public Center updateCenter(@RequestBody Center newCenter) throws NotFoundException {
+        return centerService.updateCenter(newCenter);
+    }
+
+    @DeleteMapping()
+    public void deleteCenter(Long id) throws NotFoundException {
+        centerService.deleteCenter(id);
+    }
 
     @PostMapping()
     public Center createCenter(@RequestBody Center newCenter) {
@@ -27,7 +36,7 @@ public class CenterController {
     }
 
     @GetMapping("/centerById")
-    public Optional<Center> getCenterbyId(@RequestParam int id) throws NotFoundException {
+    public Optional<Center> getCenterById(@RequestParam Long id) throws NotFoundException {
         return centerService.getCenterById(id);
     }
 

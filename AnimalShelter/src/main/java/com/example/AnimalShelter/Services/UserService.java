@@ -18,12 +18,36 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Optional<User> getUserById(int id) throws NotFoundException {
+    public User updateUser(User newUser) throws NotFoundException {
+        User user = userRepository.findById(newUser.getId()).orElseThrow(() -> new NotFoundException("Id not found"));
+
+        if (newUser.getName() != null)
+            user.setName(newUser.getName());
+        if (newUser.getAge() != null)
+            user.setAge(newUser.getAge());
+        if (newUser.getEmail() != null)
+            user.setEmail(newUser.getEmail());
+        if (newUser.getPassword() != null)
+            user.setPassword(newUser.getPassword());
+        if (newUser.getUsername() != null)
+            user.setUsername(newUser.getUsername());
+        if (newUser.getAddress() != null)
+            user.setAddress(newUser.getAddress());
+
+        return userRepository.save(user);
+    }
+
+    public void deleteUser(Long id) throws NotFoundException {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Id not found"));
+        userRepository.delete(user);
+    }
+
+    public Optional<User> getUserById(Long id) throws NotFoundException {
         Optional<User> user;
-        if (userRepository.getById(id).isEmpty())
+        if (userRepository.findById(id).isEmpty())
             throw new NotFoundException("Id not found");
         else
-            user = userRepository.getById(id);
+            user = userRepository.findById(id);
         return user;
     }
 
@@ -37,6 +61,9 @@ public class UserService {
 
     public User createUser(User newUser) {
 
+        //TODO: fa verificari (username ul sa fie unic, email sa fie unic)
+        //TODO: sa verifici ca parola are un anumit format (lungime,etc)
+
         User userToBeSaved = User.builder()
                 .name(newUser.getName())
                 .age(newUser.getAge())
@@ -46,14 +73,6 @@ public class UserService {
                 .address(newUser.getAddress())
                 .build();
         userRepository.save(userToBeSaved);
-
-//        User a = new User();
-//        a.setName("Ion");
-//        a.setAge(24);
-//        a.setUsername("ionutz");
-//        a.setEmail("ion24@gmail.com");
-//        a.setPassword("parola");
-//        a.setAddress("Bucuresti");
         return userToBeSaved;
     }
 }

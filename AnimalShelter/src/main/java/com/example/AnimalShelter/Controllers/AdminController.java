@@ -18,13 +18,23 @@ public class AdminController {
         this.adminService = adminService;
     }
 
+    @PutMapping
+    public Admin updateAdmin(@RequestBody Admin newAdmin) throws NotFoundException {
+        return adminService.updateAdmin(newAdmin);
+    }
+
+    @DeleteMapping()
+    public void deleteAdmin(Long id) throws NotFoundException {
+        adminService.deleteAdmin(id);
+    }
+
     @PostMapping()
     public Admin createAdmin(@RequestBody Admin newAdmin) {
         return adminService.createAdmin(newAdmin);
     }
 
     @GetMapping("/adminById")
-    public Admin getAdminById(@RequestParam int id) throws NotFoundException {
+    public Admin getAdminById(@RequestParam Long id) throws NotFoundException {
         return adminService.getAdminById(id);
     }
 

@@ -20,13 +20,18 @@ public class UserController {
         this.userService = userService;
     }
 
+    @DeleteMapping()
+    public void deleteUser(Long id) throws NotFoundException {
+        userService.deleteUser(id);
+    }
+
     @PostMapping()
     public User createUser(@RequestBody User newUser) {
         return userService.createUser(newUser);
     }
 
     @GetMapping("/userById")
-    public Optional<User> getUserById(@RequestParam int id) throws NotFoundException {
+    public Optional<User> getUserById(@RequestParam Long id) throws NotFoundException {
         return userService.getUserById(id);
     }
 

@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface CenterRepository extends JpaRepository<Center,Long> {
 
-    Optional<Center> getById(int id);
+    Optional<Center> findById(Long id);
 }
