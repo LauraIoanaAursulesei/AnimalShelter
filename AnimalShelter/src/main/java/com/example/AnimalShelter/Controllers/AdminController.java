@@ -1,6 +1,7 @@
 package com.example.AnimalShelter.Controllers;
 
 import com.example.AnimalShelter.Exceptions.NotFoundException;
+import com.example.AnimalShelter.Exceptions.UsernameAlreadyInUseException;
 import com.example.AnimalShelter.Models.Admin;
 import com.example.AnimalShelter.Services.AdminService;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,8 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @PutMapping
-    public Admin updateAdmin(@RequestBody Admin newAdmin) throws NotFoundException {
+    @PutMapping()
+    public Admin updateAdmin(@RequestBody Admin newAdmin) throws NotFoundException, UsernameAlreadyInUseException {
         return adminService.updateAdmin(newAdmin);
     }
 
@@ -29,13 +30,18 @@ public class AdminController {
     }
 
     @PostMapping()
-    public Admin createAdmin(@RequestBody Admin newAdmin) {
+    public Admin createAdmin(@RequestBody Admin newAdmin) throws UsernameAlreadyInUseException {
         return adminService.createAdmin(newAdmin);
     }
 
     @GetMapping("/adminById")
     public Admin getAdminById(@RequestParam Long id) throws NotFoundException {
         return adminService.getAdminById(id);
+    }
+
+    @GetMapping("/adminByUsername")
+    public Admin getAdminByUsername(@RequestParam String username) throws NotFoundException {
+        return adminService.getAdminByUsername(username);
     }
 
     @GetMapping("/allAdmins")
