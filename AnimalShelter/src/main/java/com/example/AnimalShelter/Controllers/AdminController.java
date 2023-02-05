@@ -1,7 +1,7 @@
 package com.example.AnimalShelter.Controllers;
 
 import com.example.AnimalShelter.Exceptions.NotFoundException;
-import com.example.AnimalShelter.Exceptions.UsernameAlreadyInUseException;
+import com.example.AnimalShelter.Exceptions.AlreadyInUseException;
 import com.example.AnimalShelter.Models.Admin;
 import com.example.AnimalShelter.Services.AdminService;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class AdminController {
     }
 
     @PutMapping()
-    public Admin updateAdmin(@RequestBody Admin newAdmin) throws NotFoundException, UsernameAlreadyInUseException {
+    public Admin updateAdmin(@RequestBody Admin newAdmin) throws NotFoundException, AlreadyInUseException {
         return adminService.updateAdmin(newAdmin);
     }
 
@@ -30,7 +30,7 @@ public class AdminController {
     }
 
     @PostMapping()
-    public Admin createAdmin(@RequestBody Admin newAdmin) throws UsernameAlreadyInUseException {
+    public Admin createAdmin(@RequestBody Admin newAdmin) throws AlreadyInUseException {
         return adminService.createAdmin(newAdmin);
     }
 

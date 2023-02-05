@@ -1,9 +1,11 @@
 package com.example.AnimalShelter.Services;
 
 import com.example.AnimalShelter.Exceptions.NotFoundException;
-import com.example.AnimalShelter.Exceptions.UsernameAlreadyInUseException;
+import com.example.AnimalShelter.Exceptions.AlreadyInUseException;
 import com.example.AnimalShelter.Models.Admin;
 import com.example.AnimalShelter.Repositories.AdminRepository;
+import com.example.AnimalShelter.Repositories.CenterRepository;
+import com.example.AnimalShelter.Repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,17 +15,22 @@ import java.util.List;
 public class AdminService {
 
     AdminRepository adminRepository;
-    UserService userService;
+    UserRepository userRepository;
+    CenterRepository centerRepository;
 
-    public AdminService(AdminRepository adminRepository, UserService userService) {
+    public AdminService(AdminRepository adminRepository, UserRepository userRepository, CenterRepository centerRepository) {
         this.adminRepository = adminRepository;
-        this.userService = userService;
+        this.userRepository = userRepository;
+        this.centerRepository = centerRepository;
     }
 
-    public Admin updateAdmin(Admin newAdmin) throws NotFoundException, UsernameAlreadyInUseException {
+    public Admin updateAdmin(Admin newAdmin) throws NotFoundException, AlreadyInUseException {
         Admin admin = adminRepository.findById(newAdmin.getId()).orElseThrow(() -> new NotFoundException("Id not found"));
-        if (!isAdminUsernameUnique(newAdmin.getUsername()) && !userService.isUserUsernameUnique(newAdmin.getUsername())) {
-            throw new UsernameAlreadyInUseException("Username already in use");
+        if (!isAdminUsernameUnique(newAdmin.getUsername()) && !isUserUsernameUnique(newAdmin.getUsername())) {
+            throw new AlreadyInUseException("Username already in use");
+        }
+        if (!isAdminEmailUnique(newAdmin.getEmail()) && !isUserEmailUnique(newAdmin.getEmail()) && !isCenterEmailUnique(newAdmin.getEmail())) {
+            throw new AlreadyInUseException("Email already in use");
         }
 
         if (newAdmin.getName() != null)
@@ -59,13 +66,32 @@ public class AdminService {
         return adminRepository.findAll();
     }
 
+    public boolean isAdminEmailUnique(String email) {
+        return adminRepository.findByEmail(email).isEmpty();
+    }
+
+    public boolean isUserEmailUnique(String email) {
+        return userRepository.findByEmail(email).isEmpty();
+    }
+
+    public boolean isCenterEmailUnique(String email) {
+        return centerRepository.findByEmail(email).isEmpty();
+    }
+
     public boolean isAdminUsernameUnique(String username) {
         return adminRepository.findByUsername(username).isEmpty();
     }
 
-    public Admin createAdmin(Admin newAdmin) throws UsernameAlreadyInUseException {
-        if (!isAdminUsernameUnique(newAdmin.getUsername()) && !userService.isUserUsernameUnique(newAdmin.getUsername())) {
-            throw new UsernameAlreadyInUseException("Username already in use");
+    public boolean isUserUsernameUnique(String username) {
+        return userRepository.findByUsername(username).isEmpty();
+    }
+
+    public Admin createAdmin(Admin newAdmin) throws AlreadyInUseException {
+        if (!isAdminUsernameUnique(newAdmin.getUsername()) && !isUserUsernameUnique(newAdmin.getUsername())) {
+            throw new AlreadyInUseException("Username already in use");
+        }
+        if (!isAdminEmailUnique(newAdmin.getEmail()) && !isUserEmailUnique(newAdmin.getEmail()) && !isCenterEmailUnique(newAdmin.getEmail())) {
+            throw new AlreadyInUseException("Email already in use");
         }
 
 //TODO: fac verificari (username ul sa fie unic, email sa fie unic)

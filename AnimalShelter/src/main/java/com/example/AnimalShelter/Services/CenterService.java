@@ -1,8 +1,11 @@
 package com.example.AnimalShelter.Services;
 
+import com.example.AnimalShelter.Exceptions.AlreadyInUseException;
 import com.example.AnimalShelter.Exceptions.NotFoundException;
 import com.example.AnimalShelter.Models.Center;
+import com.example.AnimalShelter.Repositories.AdminRepository;
 import com.example.AnimalShelter.Repositories.CenterRepository;
+import com.example.AnimalShelter.Repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,13 +15,20 @@ import java.util.Optional;
 public class CenterService {
 
     CenterRepository centerRepository;
+    AdminRepository adminRepository;
+    UserRepository userRepository;
 
-    public CenterService(CenterRepository centerRepository) {
+    public CenterService(CenterRepository centerRepository, AdminRepository adminRepository, UserRepository userRepository) {
         this.centerRepository = centerRepository;
+        this.adminRepository = adminRepository;
+        this.userRepository = userRepository;
     }
 
-    public Center updateCenter(Center newCenter) throws NotFoundException {
+    public Center updateCenter(Center newCenter) throws NotFoundException, AlreadyInUseException {
         Center center = centerRepository.findById(newCenter.getId()).orElseThrow(() -> new NotFoundException("Id not found"));
+        if (!isCenterEmailUnique(newCenter.getEmail()) && !isAdminEmailUnique(newCenter.getEmail()) && !isUserEmailUnique(newCenter.getEmail())) {
+            throw new AlreadyInUseException("Email already in use");
+        }
 
         if (newCenter.getName() != null)
             center.setName(newCenter.getName());
@@ -52,11 +62,26 @@ public class CenterService {
         return center;
     }
 
+    public boolean isCenterEmailUnique(String email) {
+        return centerRepository.findByEmail(email).isEmpty();
+    }
+
+    public boolean isUserEmailUnique(String email) {
+        return userRepository.findByEmail(email).isEmpty();
+    }
+
+    public boolean isAdminEmailUnique(String email) {
+        return adminRepository.findByEmail(email).isEmpty();
+    }
+
     public List<Center> getAllCenters() {
         return centerRepository.findAll();
     }
 
-    public Center createCenter(Center newCenter) {
+    public Center createCenter(Center newCenter) throws AlreadyInUseException {
+        if (!isCenterEmailUnique(newCenter.getEmail()) && !isAdminEmailUnique(newCenter.getEmail()) && !isUserEmailUnique(newCenter.getEmail())) {
+            throw new AlreadyInUseException("Email already in use");
+        }
 
         Center centerToBeSaved = Center.builder()
                 .name(newCenter.getName())

@@ -1,7 +1,7 @@
 package com.example.AnimalShelter.Controllers;
 
 import com.example.AnimalShelter.Exceptions.NotFoundException;
-import com.example.AnimalShelter.Exceptions.UsernameAlreadyInUseException;
+import com.example.AnimalShelter.Exceptions.AlreadyInUseException;
 import com.example.AnimalShelter.Models.User;
 import com.example.AnimalShelter.Services.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +21,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PutMapping
-    public User updateUser(@RequestBody User newUser) throws NotFoundException, UsernameAlreadyInUseException {
+    @PutMapping()
+    public User updateUser(@RequestBody User newUser) throws NotFoundException, AlreadyInUseException {
         return userService.updateUser(newUser);
     }
 
@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public User createUser(@RequestBody User newUser) throws UsernameAlreadyInUseException {
+    public User createUser(@RequestBody User newUser) throws AlreadyInUseException {
         return userService.createUser(newUser);
     }
 
@@ -49,5 +49,10 @@ public class UserController {
     @GetMapping("/usersByName")
     public List<User> getUsersByName(@RequestParam String name) {
         return userService.getUsersByName(name);
+    }
+
+    @GetMapping("/userByUsername")
+    public User getUserByUsername(@RequestParam String username) throws NotFoundException {
+        return userService.getUserByUsername(username);
     }
 }

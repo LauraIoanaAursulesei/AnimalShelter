@@ -1,5 +1,6 @@
 package com.example.AnimalShelter.Controllers;
 
+import com.example.AnimalShelter.Exceptions.AlreadyInUseException;
 import com.example.AnimalShelter.Exceptions.NotFoundException;
 import com.example.AnimalShelter.Models.Center;
 import com.example.AnimalShelter.Services.CenterService;
@@ -21,7 +22,7 @@ public class CenterController {
     }
 
     @PutMapping()
-    public Center updateCenter(@RequestBody Center newCenter) throws NotFoundException {
+    public Center updateCenter(@RequestBody Center newCenter) throws NotFoundException, AlreadyInUseException {
         return centerService.updateCenter(newCenter);
     }
 
@@ -31,7 +32,7 @@ public class CenterController {
     }
 
     @PostMapping()
-    public Center createCenter(@RequestBody Center newCenter) {
+    public Center createCenter(@RequestBody Center newCenter) throws AlreadyInUseException {
         return centerService.createCenter(newCenter);
     }
 
