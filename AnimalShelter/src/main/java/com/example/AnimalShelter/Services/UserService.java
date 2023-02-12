@@ -1,5 +1,6 @@
 package com.example.AnimalShelter.Services;
 
+import com.example.AnimalShelter.Exceptions.InvalidPasswordException;
 import com.example.AnimalShelter.Exceptions.NotFoundException;
 import com.example.AnimalShelter.Exceptions.AlreadyInUseException;
 import com.example.AnimalShelter.Models.User;
@@ -7,8 +8,11 @@ import com.example.AnimalShelter.Repositories.AdminRepository;
 import com.example.AnimalShelter.Repositories.CenterRepository;
 import com.example.AnimalShelter.Repositories.UserRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 
@@ -68,12 +72,18 @@ public class UserService {
         return user;
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<User> getAllUsers() throws NotFoundException {
+        List<User> users = userRepository.findAll();
+        if (users.isEmpty())
+            throw new NotFoundException("There are no users to display");
+        return users;
     }
 
-    public List<User> getUsersByName(String name) {
-        return userRepository.getAllByName(name);
+    public List<User> getUsersByName(String name) throws NotFoundException {
+        List<User> users = userRepository.getAllByName(name);
+        if (users.isEmpty())
+            throw new NotFoundException("There are no users with this name");
+        return users;
     }
 
     public boolean isUserEmailUnique(String email) {
@@ -96,16 +106,24 @@ public class UserService {
         return adminRepository.findByUsername(username).isEmpty();
     }
 
-    public User createUser(User newUser) throws AlreadyInUseException {
+    private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
+    private static final Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
+
+    public static boolean isUserPasswordValid(final String password) {
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+
+    public User createUser(User newUser) throws AlreadyInUseException, InvalidPasswordException {
         if (!isUserUsernameUnique(newUser.getUsername()) && !isAdminUsernameUnique(newUser.getUsername())) {
             throw new AlreadyInUseException("Username already in use");
         }
         if (!isUserEmailUnique(newUser.getEmail()) && !isAdminEmailUnique(newUser.getEmail()) && !isCenterEmailUnique(newUser.getEmail())) {
             throw new AlreadyInUseException("Email already in use");
         }
-
-        //TODO: fac verificari (username ul sa fie unic, email sa fie unic)
-        //TODO: sa verific ca parola are un anumit format (lungime,etc)
+        if (!isUserPasswordValid(newUser.getPassword())) {
+            throw new InvalidPasswordException("Invalid password");
+        }
 
         User userToBeSaved = User.builder()
                 .name(newUser.getName())

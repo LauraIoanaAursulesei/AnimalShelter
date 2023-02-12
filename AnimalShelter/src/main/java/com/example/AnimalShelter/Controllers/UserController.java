@@ -1,5 +1,6 @@
 package com.example.AnimalShelter.Controllers;
 
+import com.example.AnimalShelter.Exceptions.InvalidPasswordException;
 import com.example.AnimalShelter.Exceptions.NotFoundException;
 import com.example.AnimalShelter.Exceptions.AlreadyInUseException;
 import com.example.AnimalShelter.Models.User;
@@ -32,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public User createUser(@RequestBody User newUser) throws AlreadyInUseException {
+    public User createUser(@RequestBody User newUser) throws AlreadyInUseException, InvalidPasswordException {
         return userService.createUser(newUser);
     }
 
@@ -42,12 +43,12 @@ public class UserController {
     }
 
     @GetMapping("/allUsers")
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers() throws NotFoundException {
         return userService.getAllUsers();
     }
 
     @GetMapping("/usersByName")
-    public List<User> getUsersByName(@RequestParam String name) {
+    public List<User> getUsersByName(@RequestParam String name) throws NotFoundException {
         return userService.getUsersByName(name);
     }
 

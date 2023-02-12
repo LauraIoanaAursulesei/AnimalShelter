@@ -1,5 +1,6 @@
 package com.example.AnimalShelter.Controllers;
 
+import com.example.AnimalShelter.Exceptions.InvalidPasswordException;
 import com.example.AnimalShelter.Exceptions.NotFoundException;
 import com.example.AnimalShelter.Exceptions.AlreadyInUseException;
 import com.example.AnimalShelter.Models.Admin;
@@ -30,7 +31,7 @@ public class AdminController {
     }
 
     @PostMapping()
-    public Admin createAdmin(@RequestBody Admin newAdmin) throws AlreadyInUseException {
+    public Admin createAdmin(@RequestBody Admin newAdmin) throws AlreadyInUseException, InvalidPasswordException {
         return adminService.createAdmin(newAdmin);
     }
 

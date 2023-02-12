@@ -1,5 +1,6 @@
 package com.example.AnimalShelter.Services;
 
+import com.example.AnimalShelter.Exceptions.InvalidPasswordException;
 import com.example.AnimalShelter.Exceptions.NotFoundException;
 import com.example.AnimalShelter.Exceptions.AlreadyInUseException;
 import com.example.AnimalShelter.Models.Admin;
@@ -9,6 +10,8 @@ import com.example.AnimalShelter.Repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 
@@ -86,16 +89,24 @@ public class AdminService {
         return userRepository.findByUsername(username).isEmpty();
     }
 
-    public Admin createAdmin(Admin newAdmin) throws AlreadyInUseException {
+    private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";
+    private static final Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
+
+    public static boolean isAdminPasswordValid(final String password) {
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+
+    public Admin createAdmin(Admin newAdmin) throws AlreadyInUseException, InvalidPasswordException {
         if (!isAdminUsernameUnique(newAdmin.getUsername()) && !isUserUsernameUnique(newAdmin.getUsername())) {
             throw new AlreadyInUseException("Username already in use");
         }
         if (!isAdminEmailUnique(newAdmin.getEmail()) && !isUserEmailUnique(newAdmin.getEmail()) && !isCenterEmailUnique(newAdmin.getEmail())) {
             throw new AlreadyInUseException("Email already in use");
         }
-
-//TODO: fac verificari (username ul sa fie unic, email sa fie unic)
-//TODO: sa verific ca parola are un anumit format (lungime,etc)
+        if (!isAdminPasswordValid(newAdmin.getPassword())) {
+            throw new InvalidPasswordException("Invalid password");
+        }
 
         Admin adminToBeSaved = Admin.builder()
                 .name(newAdmin.getName())
