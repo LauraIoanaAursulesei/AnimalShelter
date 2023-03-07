@@ -1,7 +1,10 @@
 package com.example.AnimalShelter.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,4 +34,11 @@ public class Center {
     private String email;
     @Column(name="capacity")
     private Integer capacity;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "center",orphanRemoval = true, cascade = {CascadeType.ALL})
+    List<Pet> petList;
+
+    @OneToMany(mappedBy = "center",orphanRemoval = true, cascade = {CascadeType.ALL})
+    List<Employee> employeeList;
 }

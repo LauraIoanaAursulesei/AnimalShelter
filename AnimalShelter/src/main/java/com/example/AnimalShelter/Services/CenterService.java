@@ -3,7 +3,7 @@ package com.example.AnimalShelter.Services;
 import com.example.AnimalShelter.Exceptions.AlreadyInUseException;
 import com.example.AnimalShelter.Exceptions.NotFoundException;
 import com.example.AnimalShelter.Models.Center;
-import com.example.AnimalShelter.Repositories.AdminRepository;
+import com.example.AnimalShelter.Repositories.EmployeeRepository;
 import com.example.AnimalShelter.Repositories.CenterRepository;
 import com.example.AnimalShelter.Repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -15,12 +15,12 @@ import java.util.Optional;
 public class CenterService {
 
     CenterRepository centerRepository;
-    AdminRepository adminRepository;
+    EmployeeRepository employeeRepository;
     UserRepository userRepository;
 
-    public CenterService(CenterRepository centerRepository, AdminRepository adminRepository, UserRepository userRepository) {
+    public CenterService(CenterRepository centerRepository, EmployeeRepository employeeRepository, UserRepository userRepository) {
         this.centerRepository = centerRepository;
-        this.adminRepository = adminRepository;
+        this.employeeRepository = employeeRepository;
         this.userRepository = userRepository;
     }
 
@@ -71,7 +71,7 @@ public class CenterService {
     }
 
     public boolean isAdminEmailUnique(String email) {
-        return adminRepository.findByEmail(email).isEmpty();
+        return employeeRepository.findByEmail(email).isEmpty();
     }
 
     public List<Center> getAllCenters() {

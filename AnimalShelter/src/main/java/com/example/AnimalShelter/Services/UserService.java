@@ -4,7 +4,7 @@ import com.example.AnimalShelter.Exceptions.InvalidPasswordException;
 import com.example.AnimalShelter.Exceptions.NotFoundException;
 import com.example.AnimalShelter.Exceptions.AlreadyInUseException;
 import com.example.AnimalShelter.Models.User;
-import com.example.AnimalShelter.Repositories.AdminRepository;
+import com.example.AnimalShelter.Repositories.EmployeeRepository;
 import com.example.AnimalShelter.Repositories.CenterRepository;
 import com.example.AnimalShelter.Repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -19,12 +19,12 @@ import java.util.regex.Pattern;
 public class UserService {
 
     UserRepository userRepository;
-    AdminRepository adminRepository;
+    EmployeeRepository employeeRepository;
     CenterRepository centerRepository;
 
-    public UserService(UserRepository userRepository, AdminRepository adminRepository, CenterRepository centerRepository) {
+    public UserService(UserRepository userRepository, EmployeeRepository employeeRepository, CenterRepository centerRepository) {
         this.userRepository = userRepository;
-        this.adminRepository = adminRepository;
+        this.employeeRepository = employeeRepository;
         this.centerRepository = centerRepository;
     }
 
@@ -91,7 +91,7 @@ public class UserService {
     }
 
     public boolean isAdminEmailUnique(String email) {
-        return adminRepository.findByEmail(email).isEmpty();
+        return employeeRepository.findByEmail(email).isEmpty();
     }
 
     public boolean isCenterEmailUnique(String email) {
@@ -103,7 +103,7 @@ public class UserService {
     }
 
     public boolean isAdminUsernameUnique(String username) {
-        return adminRepository.findByUsername(username).isEmpty();
+        return employeeRepository.findByUsername(username).isEmpty();
     }
 
     private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$";

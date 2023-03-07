@@ -1,5 +1,6 @@
 package com.example.AnimalShelter.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,5 +34,9 @@ public class Pet {
     private String behavior;
     @Column(name = "vaccine")
     private Boolean vaccine;
+
+    @JsonIgnore
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    private Center center;
 
 }

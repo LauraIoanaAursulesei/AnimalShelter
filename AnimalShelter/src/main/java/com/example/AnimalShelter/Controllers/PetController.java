@@ -1,5 +1,7 @@
 package com.example.AnimalShelter.Controllers;
 
+import com.example.AnimalShelter.Dtos.GetPetDto;
+import com.example.AnimalShelter.Dtos.RegisterPetDto;
 import com.example.AnimalShelter.Exceptions.NotFoundException;
 import com.example.AnimalShelter.Models.Pet;
 import com.example.AnimalShelter.Services.PetService;
@@ -30,7 +32,7 @@ public class PetController {
     }
 
     @PostMapping()
-    public Pet createPet(@RequestBody Pet newPet) {
+    public GetPetDto createPet(@RequestBody RegisterPetDto newPet) throws NotFoundException {
         return petService.createPet(newPet);
     }
 
@@ -40,7 +42,7 @@ public class PetController {
     }
 
     @GetMapping("/petById")
-    public ResponseEntity<Pet> getPetById(@RequestParam Long id) throws NotFoundException {
+    public ResponseEntity<GetPetDto> getPetById(@RequestParam Long id) throws NotFoundException {
         return new ResponseEntity<>(petService.getPetById(id), HttpStatus.OK);
     }
 

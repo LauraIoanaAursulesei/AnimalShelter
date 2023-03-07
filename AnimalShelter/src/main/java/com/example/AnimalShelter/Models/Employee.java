@@ -1,7 +1,10 @@
 package com.example.AnimalShelter.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -9,9 +12,9 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Builder
-@Table(name = "Admin")
+@Table(name = "Employee")
 
-public class Admin {
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,4 +31,9 @@ public class Admin {
     @Column(name= "password")
     private String password;
 
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    private Center center;
+
+    @OneToMany(mappedBy = "employee",orphanRemoval = true,cascade = {CascadeType.ALL})
+    List<EmployeeResponsibility> employeeResponsibilityList;
 }

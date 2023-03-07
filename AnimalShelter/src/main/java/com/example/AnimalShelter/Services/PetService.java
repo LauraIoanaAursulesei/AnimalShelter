@@ -1,6 +1,9 @@
 package com.example.AnimalShelter.Services;
 
+import com.example.AnimalShelter.Dtos.GetPetDto;
+import com.example.AnimalShelter.Dtos.RegisterPetDto;
 import com.example.AnimalShelter.Exceptions.NotFoundException;
+import com.example.AnimalShelter.Models.Center;
 import com.example.AnimalShelter.Models.Pet;
 import com.example.AnimalShelter.Repositories.PetRepository;
 import org.springframework.stereotype.Service;
@@ -50,9 +53,9 @@ public class PetService {
         return petRepository.getAllByAge(age);
     }
 
-    public Pet getPetById(Long id) throws NotFoundException {
-        Pet pet = petRepository.findById(id).orElseThrow(() -> new NotFoundException("Id not found"));
-        return pet;
+    public GetPetDto getPetById(Long id) throws NotFoundException {
+        GetPetDto getPetDto = petRepository.findGetPetDtoById(id).orElseThrow(() -> new NotFoundException("Id not found"));
+        return getPetDto;
     }
 
     public List<Pet> getAllPets() {
@@ -60,7 +63,9 @@ public class PetService {
     }
 
 
-    public Pet createPet(Pet newPet) {
+    public GetPetDto createPet(RegisterPetDto newPet) throws NotFoundException {
+
+        Center centerObj = Center.builder().id(newPet.getCenterId()).build();
 
         Pet petToBeSaved = Pet.builder()
                 .name(newPet.getName())
@@ -71,8 +76,12 @@ public class PetService {
                 .sex(newPet.getSex())
                 .behavior(newPet.getBehavior())
                 .vaccine(newPet.getVaccine())
+                .center(centerObj)
                 .build();
+
         petRepository.save(petToBeSaved);
-        return petToBeSaved;
+
+        GetPetDto getPetDto = petRepository.findGetPetDtoById(petToBeSaved.getId()).orElseThrow(() -> new NotFoundException("Id not found"));
+        return getPetDto;
     }
 }
